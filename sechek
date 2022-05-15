@@ -1,0 +1,16 @@
+#!/bin/bash
+## проверка на root
+
+var=$(whoami)
+echo $var       #для проверки вывода (временно)
+
+if  [ $var!="root" ]
+        then
+                echo "you will must be root"
+        else
+                sestatus | grep staus
+
+fi
+
+## если SElinux включен предложить выключит и наоборот
+~                                                             
