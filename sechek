@@ -8,9 +8,28 @@ if  [ $var!="root" ]
         then
                 echo "you will must be root"
         else
-                sestatus | grep staus
+                sestatus | grep status
 
 fi
 
-## если SElinux включен предложить выключит и наоборот
+## если SElinux выключен- включить? (eys/no?)
+#if [ =no  ]
+#	then
+#		echo "goodbay"
+# 	else
+#		selinux-command-on 
+#
+#
+#
+#
+## если включен- выключить? (yes/no?)
+#if[  =no ]
+#	then
+#		echo "godbay"
+#
+#	else
+#		selinux-command-off
+#fi
+
+## 
 ~                                                             
