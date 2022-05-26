@@ -1,0 +1,64 @@
+#!/bin/bash
+# helppage
+
+[ "$1" == "-h" ]&&{                           # если параметр равен "-h" 
+		echo '+-+-+-+-+-+-+'
+		echo "This is help page"
+		exit
+}
+
+#[ "$1" != "-h" ]&&                           # если параметр не равен "-h"
+#{
+	
+#		    echo 'type "-h" for print help page'
+#		    exit
+#}
+
+#[ -z "$1" ]&&{			#Если скрипт не получает входных параметров ???
+if [ $(whoami) != root ]                               
+	then                                          
+		echo $(whoami)                          
+		echo "you must to be root"
+	else
+		var=$(sestatus | grep -i 'selinux status') # вывод sestatus 
+		echo $var
+		echo '*****'
+		echo 'Current mode:' $(getenforce)
+		echo '*****'
+		echo '/etc/selinux/config mode:' $(cat /etc/selinux/config | grep -i '^selinux=')
+ fi
+# условия работы скрипта
+
+ if  [[ $var == 'SELinux status:                 enabled' ]] # сдесь не знаю как правильно сделать
+	then 
+		echo 'If you want switch "off" SELinux - type "yes": '
+		read a		
+   if [ $a == "yes" ]
+	then
+		sed -i "s/SELINUX=enforsing/SELINUX=disabled/" /etc/selinux/config
+		cat /etc/selinux/config | grep -i '^selinux='
+	else 	
+		echo "error"
+ fi
+
+
+ elif [[ $var == 'SELinux status:                 disabled' ]]
+        then 
+		echo 'If you want switch "on" SELinux - type "yes": '
+		read b
+ if [ $b == "yes" ]
+	then
+	        sed -i "s/SELINUX=disabled/SELINUX=enforsing/" /etc/selinux/config
+		cat /etc/selinux/config | grep -i '^selinux='		
+        else
+		echo "error"
+  fi
+
+ fi
+#}
+#function help
+
+
+# собрать кострукцию опроса, -ok
+# написать команду sed(замена строки) - ok
+# добавить 
