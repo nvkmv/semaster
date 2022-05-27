@@ -1,6 +1,5 @@
 #!/bin/bash
 # helppage
-
 [ "$1" == "-h" ]&&{                           # если параметр равен "-h" 
 		echo '+-+-+-+-+-+-+'
 		echo "This is help page"
@@ -25,7 +24,7 @@ if [ $(whoami) != root ]                    #
 # условия работы скрипта
  if  [[ $var == 'SELinux status:                 enabled' ]] # сдесь не знаю как правильно сделать без табов
 	then 
-		echo -n 'If you want switch "off" SELinux - type "yes": '
+		echo  'If you want switch "off" SELinux - type "yes": '
 		read a		
    if [ $a == "yes" ]
 	then
@@ -46,10 +45,4 @@ if [ $(whoami) != root ]                    #
 		echo "error"
   fi
  fi
-}
-
-
-
-# собрать кострукцию опроса, -ok
-# написать команду sed(замена строки) - ok
-# добавить 
+} 
