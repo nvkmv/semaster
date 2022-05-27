@@ -6,32 +6,26 @@
 		echo "This is help page"
 		exit
 }
-
-#[ "$1" != "-h" ]&&                           # если параметр не равен "-h"
-#{
-	
-#		    echo 'type "-h" for print help page'
-#		    exit
-#}
-
-[ $# == 0 ]&&{			#Если скрипт не получает входных параметров ???
-if [ $(whoami) != root ]                               
-	then                                          
-		echo $(whoami)                          
-		echo "you must to be root"
+#
+[ "$#" == 0 ]&&{			#Если скрипт не получает входных параметров
+if [ $(whoami) != root ]                    #           
+	then                                #           
+		echo "you are "$(whoami)    # check root           
+		echo "but must to be root"
+                echo 'type with"-h" for print help page '   
 	else
-		var=$(sestatus | grep -i 'selinux status') # вывод sestatus 
+		var=$(sestatus | grep -i 'selinux status') # print  sestatus 
 		echo $var
-		echo '*****'
+		echo '*************************'
 		echo 'Current mode:' $(getenforce)
-		echo '*****'
+		echo '*************************'
 		echo '/etc/selinux/config mode:' $(cat /etc/selinux/config | grep -i '^selinux=')
+		echo '*************************'
  fi
 # условия работы скрипта
-
- if  [[ $var == 'SELinux status:                 enabled' ]] # сдесь не знаю как правильно сделать
+ if  [[ $var == 'SELinux status:                 enabled' ]] # сдесь не знаю как правильно сделать без табов
 	then 
-		echo 'If you want switch "off" SELinux - type "yes": '
+		echo -n 'If you want switch "off" SELinux - type "yes": '
 		read a		
    if [ $a == "yes" ]
 	then
@@ -40,8 +34,6 @@ if [ $(whoami) != root ]
 	else 	
 		echo "error"
  fi
-
-
  elif [[ $var == 'SELinux status:                 disabled' ]]
         then 
 		echo 'If you want switch "on" SELinux - type "yes": '
@@ -53,10 +45,9 @@ if [ $(whoami) != root ]
         else
 		echo "error"
   fi
-
  fi
 }
-#function help
+
 
 
 # собрать кострукцию опроса, -ok
