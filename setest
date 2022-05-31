@@ -2,11 +2,15 @@
 #help page
 [ "$1" == "-h" ]&&{                           # если параметр равен "-h" 
 
-		echo "This is help page"
+		echo "++++++++++++++++++++++++++++++++++++++++++++"
+		echo "* This script can enable or disable SELinux"
+		echo "* You must be a root "
+		echo "* After work script need reboot your system"
+		echo "++++++++++++++++++++++++++++++++++++++++++++"
 		exit
 }
 #
-[ "$#" == 0 ]&&{
+[ "$#" == 0 ]&&{                        # запуск работы скрипта без параметров
 if [ $(whoami) != root ]; then          #check root           
 		echo "you are $(whoami), but must to be root"
                 echo 'type with"-h" for print help page '   
@@ -24,7 +28,7 @@ if  [[ $var == 'SELinux status:                 enabled' ]]; then # не зна�
 		echo  'If you want switch "off" SELinux - type "yes": '
 		read a		
   if [ $a == "yes" ]; then
-		sed -i "s/SELINUX=enforsing/SELINUX=disabled/" /etc/selinux/config
+		sed -i "s/SELINUX=enforsing/SELINUX=disabled/" /etc/selinux/config # меняем файл конфигурации
 		cat /etc/selinux/config | grep -i '^selinux='
   else 	
 		echo "error"
