@@ -6,13 +6,11 @@
 		exit
 }
 #
-[ "$#" == 0 ]&&{			#Если скрипт не получает входных параметров
-if [ $(whoami) != root ]                    #           
-	then                                #           
-		echo "you are "$(whoami)    # check root           
-		echo "but must to be root"
+[ "$#" == 0 ]&&{
+if [ $(whoami) != root ]; then          #check root           
+		echo "you are $(whoami), but must to be root"
                 echo 'type with"-h" for print help page '   
-	else
+else
 		var=$(sestatus | grep -i 'selinux status') # print  sestatus 
 		echo $var
 		echo '*************************'
@@ -20,29 +18,35 @@ if [ $(whoami) != root ]                    #
 		echo '*************************'
 		echo '/etc/selinux/config mode:' $(cat /etc/selinux/config | grep -i '^selinux=')
 		echo '*************************'
- fi
+fi
 # условия работы скрипта
- if  [[ $var == 'SELinux status:                 enabled' ]] # сдесь не знаю как правильно сделать без табов
-	then 
+if  [[ $var == 'SELinux status:                 enabled' ]]; then # не знаю как сделать без табов
 		echo  'If you want switch "off" SELinux - type "yes": '
 		read a		
-   if [ $a == "yes" ]
-	then
+  if [ $a == "yes" ]; then
 		sed -i "s/SELINUX=enforsing/SELINUX=disabled/" /etc/selinux/config
 		cat /etc/selinux/config | grep -i '^selinux='
-	else 	
-		echo "error"
- fi
- elif [[ $var == 'SELinux status:                 disabled' ]]
-        then 
-		echo 'If you want switch "on" SELinux - type "yes": '
-		read b
- if [ $b == "yes" ]
-	then
-	        sed -i "s/SELINUX=disabled/SELINUX=enforsing/" /etc/selinux/config
-		cat /etc/selinux/config | grep -i '^selinux='		
-        else
+  else 	
 		echo "error"
   fi
+
+elif [[ $var == 'SELinux status:                 disabled' ]]; then 
+		echo 'If you want switch "on" SELinux - type "yes": '
+		read b
+ if [ $b == "yes" ]; then
+	        sed -i "s/SELINUX=disabled/SELINUX=enforsing/" /etc/selinux/config
+		setenforce 1
+		cat /etc/selinux/config | grep -i '^selinux='		
+ else
+		echo "error"
  fi
+fi
+echo "The system must be rebooted for the changes to take effect. reboot now?(y/n):"
+read reb
+  if [ $reb == "y" ]; then
+		reboot
+
+  
+fi
+
 } 
