@@ -28,6 +28,7 @@ if  [[ $var == 'SELinux status:                 enabled' ]]; then # не зна�
 		cat /etc/selinux/config | grep -i '^selinux='
   else 	
 		echo "error"
+		exit
   fi
  		echo "The system must be rebooted for the changes to take effect. reboot now?(y/n):"
 		read reb
@@ -44,6 +45,7 @@ elif [[ $var == 'SELinux status:                 disabled' ]]; then
 		cat /etc/selinux/config | grep -i '^selinux='		
  else		
  		echo "error"
+		exit
  fi
 		echo "The system must be rebooted for the changes to take effect. reboot now?(y/n):"
 		read reb
