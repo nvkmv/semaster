@@ -1,7 +1,7 @@
 #!/bin/bash
-# helppage
+#help page
 [ "$1" == "-h" ]&&{                           # если параметр равен "-h" 
-		echo '+-+-+-+-+-+-+'
+
 		echo "This is help page"
 		exit
 }
@@ -28,6 +28,12 @@ if  [[ $var == 'SELinux status:                 enabled' ]]; then # не зна�
 		cat /etc/selinux/config | grep -i '^selinux='
   else 	
 		echo "error"
+		exit
+  fi
+ 		echo "The system must be rebooted for the changes to take effect. reboot now?(y/n):"
+		read reb
+  if [ $reb == "y" ]; then
+                reboot
   fi
 
 elif [[ $var == 'SELinux status:                 disabled' ]]; then 
@@ -37,16 +43,15 @@ elif [[ $var == 'SELinux status:                 disabled' ]]; then
 	        sed -i "s/SELINUX=disabled/SELINUX=enforsing/" /etc/selinux/config
 		setenforce 1
 		cat /etc/selinux/config | grep -i '^selinux='		
- else
-		echo "error"
+ else		
+ 		echo "error"
+		exit
  fi
-fi
-echo "The system must be rebooted for the changes to take effect. reboot now?(y/n):"
-read reb
-  if [ $reb == "y" ]; then
-		reboot
-
-  
+		echo "The system must be rebooted for the changes to take effect. reboot now?(y/n):"
+		read reb
+ if [ $reb == "y" ]; then
+                reboot
+ fi
 fi
 
 } 
