@@ -15,11 +15,34 @@ if [ $(whoami) != root ]; then          #check root
 		echo "you are $(whoami), but must to be root"
                 echo 'type with"-h" for print help page '   
 else
+                              # check getenforce
+
+		varse=$(getenforce)
+		echo "SEstatus: "$varse
+ if [[ $varse == "Permissive" ]]; then
+        echo 'if  you whant  change to Enforsing type"yes"'
+        read ques
+  if [[ $ques == "yes" ]]; then
+        setenforce 1
+        echo "SEstatus: "$(getenforce)
+
+  fi
+ elif [[ $varse == "Enforcing" ]]; then
+        echo ' if you want  change to Permissive type "yes"'
+        read ques2
+  if [[ $ques2 == "yes" ]]; then
+        setenforce 0
+        echo "SEstatus:"$(getenforce)
+  fi
+ fi
+
+
+                                 # check config
 		var=$(sestatus | grep -i 'selinux status') # print  sestatus 
 		echo $var
 		echo '*************************'
-		echo 'Current mode:' $(getenforce)
-		echo '*************************'
+		#echo 'Current mode:' $(getenforce)
+		#echo '*************************'
 		echo '/etc/selinux/config mode:' $(cat /etc/selinux/config | grep -i '^selinux=')
 		echo '*************************'
 fi
@@ -31,7 +54,7 @@ if  [[ $var == 'SELinux status:                 enabled' ]]; then # не зна�
 		sed -i "s/SELINUX=enforsing/SELINUX=disabled/" /etc/selinux/config # меняем файл конфигурации
 		cat /etc/selinux/config | grep -i '^selinux='
   else 	
-		echo "error"
+		echo "good bay"
 		exit
   fi
  		echo "The system must be rebooted for the changes to take effect. reboot now?(y/n):"
@@ -45,16 +68,18 @@ elif [[ $var == 'SELinux status:                 disabled' ]]; then
 		read b
  if [ $b == "yes" ]; then
 	        sed -i "s/SELINUX=disabled/SELINUX=enforsing/" /etc/selinux/config
-		setenforce 1                                     # вот это не работает, не понимаю как из скрипта запускать команды с параметрами. $(setenforce 1) ? так же не работает
 		cat /etc/selinux/config | grep -i '^selinux='		
  else		
- 		echo "error"
+ 		echo "good bay"
 		exit
  fi
 		echo "The system must be rebooted for the changes to take effect. reboot now?(y/n):"
 		read reb
  if [ $reb == "y" ]; then
                 reboot
+ else 
+		echo "changes will take effect after reboot"
+		exit
  fi
 fi
 
